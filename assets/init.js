@@ -8,12 +8,9 @@
  * 효과를 빼고 싶으면 아래 한 줄을 지우고 HTML의 data-fx도 지우면 됩니다.
  */
 
-import { mount as smoothScroll } from '../effects/smooth-scroll/index.js';
-import { mount as preview } from '../effects/hover-preview/index.js';
 import { mount as parallax } from '../effects/parallax-layers/index.js';
-import { mount as reveal } from '../effects/scroll-reveal/index.js';
-import { mount as tilt } from '../effects/tilt-card/index.js';
 import { mount as model } from '../effects/model-showcase/index.js';
+import { mount as tilt } from '../effects/tilt-card/index.js';
 import { mount as magnetic } from '../effects/magnetic-button/index.js';
 
 /**
@@ -38,32 +35,6 @@ function readOpts(el, prefix) {
 }
 
 function boot() {
-  smoothScroll(document.body);
-  const MODE_KEY = 'pm:dark';
-  const applyMode = (dark) => {
-    document.querySelectorAll('.wf-page').forEach((p) => {
-      if (dark) {
-        if (!p.dataset.lightStyle) p.dataset.lightStyle = p.getAttribute('style') || '';
-        const v = (n) => getComputedStyle(p).getPropertyValue(n).trim();
-        p.style.background = v('--wfm-bg');
-        p.style.color = v('--wfm-text');
-        p.style.setProperty('--wf-bg', v('--wfm-bg'));
-        p.style.setProperty('--wf-text', v('--wfm-text'));
-        p.style.setProperty('--wf-surface', v('--wfm-surface'));
-        p.style.setProperty('--wf-line', v('--wfm-line'));
-        p.style.setProperty('--wf-muted', v('--wfm-muted'));
-      } else if (p.dataset.lightStyle !== undefined) {
-        p.setAttribute('style', p.dataset.lightStyle);
-      }
-      p.classList.toggle('is-dark', dark);
-    });
-    try { localStorage.setItem(MODE_KEY, dark ? '1' : '0'); } catch { /* 시크릿 모드 등 */ }
-  };
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('[data-mode-toggle]')) return;
-    applyMode(!document.querySelector('.wf-page')?.classList.contains('is-dark'));
-  });
-  try { if (localStorage.getItem(MODE_KEY) === '1') applyMode(true); } catch { /* 저장 불가 환경 */ }
   document.querySelectorAll('.wf-sld').forEach((sl) => {
     const rs = [...sl.querySelectorAll('.wf-sld__r')];
     if (rs.length < 2) return;
@@ -92,27 +63,12 @@ function boot() {
       sl.addEventListener('pointerleave', () => { if (!t) t = setInterval(() => go(1), ms); });
     }
   });
-  {
-    const hideEls = [...document.querySelectorAll('[data-hide-scroll]')].map((el) => el.closest('.wf-headbar') || el);
-    if (hideEls.length) {
-      let lastY = window.scrollY;
-      window.addEventListener('scroll', () => {
-        const y = window.scrollY;
-        const dy = y - lastY;
-        lastY = y;
-        if (Math.abs(dy) < 4) return;
-        hideEls.forEach((el) => el.classList.toggle('wf-nav-hidden', dy > 0 && y > 80));
-      }, { passive: true });
-    }
-  }
-  preview('[data-fx~="preview"]');
   parallax('[data-fx~="parallax"]');
-  reveal('[data-fx~="reveal"]');
+  model('.fx-model');
   document.querySelectorAll('[data-fx~="tilt"]').forEach((el) => {
     const targets = el.querySelectorAll('.wf-card, .wf-main__slot');
     if (targets.length) tilt([...targets], readOpts(el, 'tilt-card'));
   });
-  model('.fx-model');
   document.querySelectorAll('[data-fx~="magnetic"]').forEach((el) => {
     const targets = el.querySelectorAll('.wf-btn, .wf-link, .wf-contact__mail');
     if (targets.length) magnetic([...targets], readOpts(el, 'magnetic-button'));
