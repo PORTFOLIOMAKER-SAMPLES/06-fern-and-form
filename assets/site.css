@@ -105,7 +105,7 @@ button{font:inherit;color:inherit}
 .wf-mq__set{display:flex;align-items:center}
 .wf-mq__txt{font-size:var(--mq-size, 2.6em);font-weight:800;letter-spacing:-.02em;line-height:1.1;white-space:nowrap}
 .wf-mq__sep{font-size:calc(var(--mq-size, 2.6em) * .62);font-style:normal;color:var(--wf-accent);padding:0 .35em}
-.wf-mq.is-outline .wf-mq__txt{color:transparent;-webkit-text-stroke:1.5px currentColor}
+.wf-mq.is-outline .wf-mq__txt{-webkit-text-fill-color:transparent;-webkit-text-stroke:1.5px currentColor}
 .wf-mq.is-pausable:hover .wf-mq__track{animation-play-state:paused}
 @media (prefers-reduced-motion: reduce){.wf-mq__track{animation:none}.wf-mq__set[aria-hidden]{display:none}}
 .wf-cta{position:relative;display:flex;flex-direction:column;gap:12px;width:100%;max-width:var(--wf-max);margin:0 auto;justify-content:center;border-radius:inherit}
